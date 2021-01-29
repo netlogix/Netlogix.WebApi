@@ -1,0 +1,25 @@
+{
+    "name": "netlogix/webapi",
+    "type": "neos-package",
+    "description": "jsonapi.org ",
+    "homepage": "http://websolutions.netlogix.de/",
+    "license": ["MIT"],
+    "require": {
+        "neos/flow": "^5.0",
+        "netlogix/jsonapiorg": "^5.0",
+        "netlogix/jsonapiorg-annotationgenerics": "^7.3"
+    },
+    "suggest": {
+        "netlogix/cors": "Configure CORS headers in neos for different origins"
+    },
+    "autoload": {
+        "psr-4": {
+            "Netlogix\\WebApi\\": "Classes/"
+        }
+    },
+    "extra": {
+        "neos": {
+            "package-key": "Netlogix.WebApi"
+        }
+    }
+}

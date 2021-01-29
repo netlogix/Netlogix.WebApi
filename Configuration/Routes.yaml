@@ -1,0 +1,13 @@
+-
+  name: 'EndpointDiscovery - .well-known'
+  uriPattern: '.well-known/endpoint-discovery(/{packageKey})'
+  defaults:
+    '@package':  'Netlogix.JsonApiOrg.AnnotationGenerics'
+    '@controller': 'EndpointDiscovery'
+    '@action':   'index'
+    '@format':   'json'
+    'packageKey':  ''
+  toLowerCase: true
+  routeParts:
+    packageKey:
+      toLowerCase: false

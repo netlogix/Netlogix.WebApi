@@ -1,0 +1,33 @@
+privilegeTargets:
+  Neos\Flow\Security\Authorization\Privilege\Method\MethodPrivilege:
+    'Netlogix.WebApi:InitializeGenericModelController':
+      matcher: 'method(Netlogix\WebApi\Controller\GenericModelController->initializeAction())'
+
+    'Netlogix.WebApi:GenericModelController':
+        matcher: 'method(Netlogix\WebApi\Controller\GenericModelController->(?!initialize).*Action())'
+
+    'Netlogix.WebApi:PublicCommands':
+      matcher: 'method(Netlogix\WebApi\Controller\GenericModelController->createAction()) && filter(Netlogix\WebApi\Security\Policy\PointcutFilter\ResourceArgumentIsInstanceOfPublicCommandFilter)'
+
+    'Netlogix.WebApi:EndpointDiscovery':
+      matcher: 'method(Netlogix\JsonApiOrg\AnnotationGenerics\Controller\EndpointDiscovery->indexAction())'
+
+roles:
+
+  'Neos.Flow:AuthenticatedUser':
+    privileges:
+      -
+        privilegeTarget: 'Netlogix.WebApi:GenericModelController'
+        permission: GRANT
+
+  'Neos.Flow:Everybody':
+    privileges:
+      -
+        privilegeTarget: 'Netlogix.WebApi:InitializeGenericModelController'
+        permission: GRANT
+      -
+        privilegeTarget: 'Netlogix.WebApi:PublicCommands'
+        permission: GRANT
+      -
+        privilegeTarget: 'Netlogix.WebApi:EndpointDiscovery'
+        permission: GRANT

@@ -1,0 +1,12 @@
+Neos:
+  Flow:
+    error:
+      exceptionHandler:
+        renderingGroups:
+          authenticationRequiredExceptions:
+            options:
+              templatePathAndFilename: 'resource://Netlogix.WebApi/Private/Templates/Error/Default.json'
+
+          accessDeniedExceptions:
+              options:
+                templatePathAndFilename: 'resource://Netlogix.WebApi/Private/Templates/Error/Default.json'

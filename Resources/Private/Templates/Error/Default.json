@@ -1,0 +1,2 @@
+{namespace Netlogix=Netlogix\WebApi\ViewHelper}
+{Netlogix:exception.json(exception: exception, statusMessage: statusMessage, statusCode: statusCode, referenceCode: referenceCode) -> f:format.raw()}
