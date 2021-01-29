@@ -1,7 +1,7 @@
 {
     "name": "netlogix/webapi",
     "type": "neos-package",
-    "description": "jsonapi.org ",
+    "description": "Create jsonapi.org web apis in flow",
     "homepage": "http://websolutions.netlogix.de/",
     "license": ["MIT"],
     "require": {
