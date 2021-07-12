@@ -1,0 +1,5 @@
+Neos:
+  Flow:
+    aop:
+      globalObjects:
+        addAccountIdentifierToGlobalCacheIdentifier: Netlogix\WebApi\Domain\Service\AddAccountIdentifierToGlobalCacheIdentifierService
