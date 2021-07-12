@@ -33,8 +33,16 @@ jobs:
             php-${{ matrix.php-versions }}-flow-${{ matrix.flow-versions }}-composer-
             php-${{ matrix.php-versions }}-flow-
 
+      - name: Create composer.json
+        run: composer create-project neos/flow-base-distribution ${{ env.FLOW_DIST_FOLDER }} --prefer-dist --no-progress --no-install "^${{ matrix.flow-versions }}"
+
+      - name: Change version of neos/behat to @dev
+        run: composer require "neos/behat:@dev" --dev --no-update
+        working-directory: ${{ env.FLOW_DIST_FOLDER }}
+
       - name: Install composer dependencies
-        run: composer create-project neos/flow-base-distribution ${{ env.FLOW_DIST_FOLDER }} --prefer-dist --no-progress "^${{ matrix.flow-versions }}"
+        run: composer install
+        working-directory: ${{ env.FLOW_DIST_FOLDER }}
 
       - name: Checkout code
         uses: actions/checkout@v2
