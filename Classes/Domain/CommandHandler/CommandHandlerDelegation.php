@@ -8,17 +8,24 @@ use Netlogix\JsonApiOrg\AnnotationGenerics\Domain\Model\WriteModelInterface;
 
 final class CommandHandlerDelegation
 {
-    private $commandHandlerObject;
+    private object $commandHandlerObject;
 
-    private $commandHandlerMethodName;
+    private string $commandHandlerMethodName;
 
-    private $command;
+    private WriteModelInterface $command;
 
-    public function __construct($commandHandlerObject, string $commandHandlerMethodName, WriteModelInterface $command)
-    {
+    private string $commandValidatorMethodName;
+
+    public function __construct(
+        object $commandHandlerObject,
+        string $commandHandlerMethodName,
+        WriteModelInterface $command,
+        string $commandValidatorMethodName = ''
+    ) {
         $this->commandHandlerObject = $commandHandlerObject;
         $this->commandHandlerMethodName = $commandHandlerMethodName;
         $this->command = $command;
+        $this->commandValidatorMethodName = $commandValidatorMethodName;
     }
 
     public function handle(): Result
@@ -27,13 +34,24 @@ final class CommandHandlerDelegation
         return $handler($this->command);
     }
 
-    public function getCommandHandlerObject()
+    public function validate(): Result
+    {
+        $validator = [$this->commandHandlerObject, $this->commandValidatorMethodName];
+        return $validator($this->command);
+    }
+
+    public function getCommandHandlerObject(): object
     {
         return $this->commandHandlerObject;
     }
 
-    public function getCommandHandlerMethodName()
+    public function getCommandHandlerMethodName(): string
     {
         return $this->commandHandlerMethodName;
+    }
+
+    public function getCommandValidatorMethodName(): string
+    {
+        return $this->commandValidatorMethodName;
     }
 }
