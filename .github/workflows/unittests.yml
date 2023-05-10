@@ -36,6 +36,10 @@ jobs:
       - name: Create composer.json
         run: composer create-project neos/flow-base-distribution ${{ env.FLOW_DIST_FOLDER }} --prefer-dist --no-progress --no-install "^${{ matrix.flow-versions }}"
 
+      - name: "Allow neos composer plugin"
+        run: composer config --no-plugins allow-plugins.neos/composer-plugin true
+        working-directory: ${{ env.FLOW_DIST_FOLDER }}
+
       - name: Change version of neos/behat to @dev
         run: composer require "neos/behat:@dev" --dev --no-update
         working-directory: ${{ env.FLOW_DIST_FOLDER }}
