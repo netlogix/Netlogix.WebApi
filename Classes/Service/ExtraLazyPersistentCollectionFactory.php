@@ -37,12 +37,11 @@ class ExtraLazyPersistentCollectionFactory
         string $fieldName,
         $value
     ): ExtraLazyPersistentCollection {
-        return $this->createForEntityClassName($entityClassName)
-            ->matching(
-                Criteria::create()->where(
-                    Criteria::expr()->eq($fieldName, $value)
-                )
-            );
+        $result = $this->createForEntityClassName($entityClassName)
+            ->matching(Criteria::create()->where(Criteria::expr()->eq($fieldName, $value)));
+        assert($result instanceof ExtraLazyPersistentCollection);
+
+        return $result;
     }
 
 }
