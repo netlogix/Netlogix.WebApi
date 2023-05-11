@@ -54,7 +54,7 @@ class GenericModelController extends BaseGenericModelController
         if ($result instanceof Error) {
             return $this->respondWithError($result);
         }
-        $topLevel = $this->relationshipIterator->createTopLevel($resource);
+        $topLevel = $this->relationshipIterator->createTopLevel($result);
         $this->view->assign('value', $topLevel);
     }
 
