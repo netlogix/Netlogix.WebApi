@@ -37,7 +37,7 @@ class DefaultSortParametersParserTest extends UnitTestCase
         }
     }
 
-    public function provideSortQueryStrings()
+    public static function provideSortQueryStrings(): iterable
     {
         return [
             [
