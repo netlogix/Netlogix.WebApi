@@ -103,7 +103,7 @@ class GenericModelController extends BaseGenericModelController
 
     protected function respondWithError(Error $error): string
     {
-        $this->response->addHttpHeader('Content-Type', current($this->supportedMediaTypes));
+        $this->response->setContentType(current($this->supportedMediaTypes));
         $this->response->setStatusCode(400);
 
         return json_encode(
