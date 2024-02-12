@@ -41,6 +41,20 @@ final class Errors implements \JsonSerializable
         return $this;
     }
 
+    public function addRawErrorArray(array ...$errors): self
+    {
+        foreach ($errors as $error) {
+            $this->issues[] = array_filter([
+                'code' => $error['code'] ?? null,
+                'detail' => $error['detail'] ?? null,
+                'source' => $error['source'] ?? null,
+                'meta' => $error['meta'] ?? null,
+            ]);
+        }
+
+        return $this;
+    }
+
     public function jsonSerialize()
     {
         return $this->issues;
