@@ -5,12 +5,13 @@
     "homepage": "http://websolutions.netlogix.de/",
     "license": ["MIT"],
     "require": {
-        "neos/flow": "^5.0",
-        "netlogix/jsonapiorg": "^5.0",
-        "netlogix/jsonapiorg-annotationgenerics": "^7.3"
+        "neos/flow": "^8.3",
+        "neos/fluid-adaptor": "^8.3",
+        "netlogix/jsonapiorg": "^6.0",
+        "netlogix/jsonapiorg-annotationgenerics": "^8.0"
     },
     "suggest": {
-        "netlogix/cors": "Configure CORS headers in neos for different origins"
+        "sitegeist/offcors": "Configure CORS headers in neos for different origins"
     },
     "autoload": {
         "psr-4": {
