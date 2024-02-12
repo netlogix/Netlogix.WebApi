@@ -50,6 +50,12 @@ class GenericModelController extends BaseGenericModelController
                 sprintf('%s::%s', get_class($delegation->getCommandHandlerObject()), $delegation->getCommandHandlerMethodName())
             );
         }
+        if ($delegation->getCommandValidatorMethodName() !== '') {
+            $validationResult = $delegation->validate();
+            if ($validationResult instanceof Error) {
+                return $this->respondWithError($validationResult);
+            }
+        }
         $result = $delegation->handle();
         if ($result instanceof Error) {
             return $this->respondWithError($result);
