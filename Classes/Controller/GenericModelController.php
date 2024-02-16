@@ -4,14 +4,15 @@ declare(strict_types=1);
 namespace Netlogix\WebApi\Controller;
 
 use Doctrine\Common\Collections\Selectable;
+use Neos\Flow\Annotations as Flow;
 use Neos\Flow\ObjectManagement\ObjectManagerInterface;
 use Neos\Flow\Reflection\ReflectionService;
 use Netlogix\JsonApiOrg\AnnotationGenerics\Controller\GenericModelController as BaseGenericModelController;
 use Netlogix\JsonApiOrg\AnnotationGenerics\Domain\Model\Arguments as RequestArgument;
 use Netlogix\JsonApiOrg\AnnotationGenerics\Domain\Model\WriteModelInterface;
-use Netlogix\WebApi\Domain\Command\Error;
 use Netlogix\WebApi\Domain\CommandHandler\CommandHandlerDelegation;
 use Netlogix\WebApi\Domain\CommandHandler\CommandHandlerResolver;
+use Netlogix\WebApi\Domain\Command\Error;
 use Netlogix\WebApi\Domain\Result\NoCommandHandlerFound;
 use Netlogix\WebApi\Security\Annotations as Security;
 
@@ -33,6 +34,7 @@ class GenericModelController extends BaseGenericModelController
     /**
      * @param WriteModelInterface $resource
      * @param string $resourceType
+     * @Flow\MapRequestBody("resource")
      * @Security\GuardArgument("resource")
      */
     public function createAction(WriteModelInterface $resource, $resourceType = '')
