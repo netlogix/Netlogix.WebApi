@@ -28,8 +28,18 @@ class AddAccountIdentifierToGlobalCacheIdentifierService implements CacheAwareIn
     public function getCacheEntryIdentifier(): string
     {
         $account = $this->securityContext->getAccount();
+        $identifier = 'no account';
+        if ($account !== null) {
+            $identifier = $account->getAuthenticationProviderName() . '-';
 
-        return sha1($account !== null ? $account->getAccountIdentifier() : 'no account');
+            if ($account->getAccountIdentifier() !== null) {
+                $identifier .= $account->getAccountIdentifier();
+            } else {
+                $identifier .= 'some account';
+            }
+        }
+
+        return sha1($identifier);
     }
 
 }
