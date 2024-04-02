@@ -16,7 +16,7 @@ class ResourceArgumentIsInstanceOfPublicCommandFilter implements PointcutFilterI
 {
     public function matches($className, $methodName, $methodDeclaringClassName, $pointcutQueryIdentifier)
     {
-        return $className === GenericModelController::class && $methodName === 'createAction';
+        return is_a($className, GenericModelController::class, true) && $methodName === 'createAction';
     }
 
     public function hasRuntimeEvaluationsDefinition()
