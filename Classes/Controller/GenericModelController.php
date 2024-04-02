@@ -34,6 +34,8 @@ class GenericModelController extends BaseGenericModelController
     /**
      * @param WriteModelInterface $resource
      * @param string $resourceType
+     * @return void
+     *
      * @Flow\MapRequestBody("resource")
      * @Security\GuardArgument("resource")
      */
@@ -44,7 +46,8 @@ class GenericModelController extends BaseGenericModelController
         }
         $delegation = $this->resolveCommandHandlerDelegation($resource);
         if ($delegation === null) {
-            return $this->respondWithError(new NoCommandHandlerFound());
+            $this->respondWithError(new NoCommandHandlerFound());
+            return;
         }
 
         if (class_exists('Tideways\Profiler')) {
@@ -55,12 +58,14 @@ class GenericModelController extends BaseGenericModelController
         if ($delegation->getCommandValidatorMethodName() !== '') {
             $validationResult = $delegation->validate();
             if ($validationResult instanceof Error) {
-                return $this->respondWithError($validationResult);
+                $this->respondWithError($validationResult);
+                return;
             }
         }
         $result = $delegation->handle();
         if ($result instanceof Error) {
-            return $this->respondWithError($result);
+            $this->respondWithError($result);
+            return;
         }
         $topLevel = $this->relationshipIterator->createTopLevel($result);
         $this->view->assign('value', $topLevel);
@@ -72,7 +77,6 @@ class GenericModelController extends BaseGenericModelController
         RequestArgument\Filter $filter = null,
         RequestArgument\Page $page = null
     ) {
-
         if ($sort) {
             $result = $result->matching($sort->getCriteria());
         }
@@ -109,17 +113,14 @@ class GenericModelController extends BaseGenericModelController
         return [$status, $result];
     }
 
-    protected function respondWithError(Error $error): string
+    protected function respondWithError(Error $error): void
     {
         $this->response->setContentType(current($this->supportedMediaTypes));
         $this->response->setStatusCode(400);
 
-        return json_encode(
-            [
-                'errors' => $error->getErrors()
-            ],
-            JSON_PRETTY_PRINT
-        );
+        $this->view->assign('value', [
+            'errors' => $error->getErrors()
+        ]);
     }
 
     private function resolveCommandHandlerDelegation(WriteModelInterface $command): ?CommandHandlerDelegation
