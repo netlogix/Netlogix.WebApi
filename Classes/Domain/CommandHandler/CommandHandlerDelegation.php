@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Netlogix\WebApi\Domain\CommandHandler;
 
+use Netlogix\WebApi\Domain\Command\Error;
 use Netlogix\WebApi\Domain\Command\Result;
 use Netlogix\JsonApiOrg\AnnotationGenerics\Domain\Model\WriteModelInterface;
 
@@ -40,6 +41,25 @@ final class CommandHandlerDelegation
         return $validator($this->command);
     }
 
+    /**
+     * Validates the command if a custom validator is defined.
+     * If the validation fails, the Error is returned.
+     * Otherwise, the handle method is executed and its result is returned.
+     *
+     * @return Result The result of the command execution, or an Error if validation fails.
+     */
+    public function validateAndHandle(): Result
+    {
+        if ($this->hasCommandValidatorMethod()) {
+            $validationResult = $this->validate();
+            if ($validationResult instanceof Error) {
+                return $validationResult;
+            }
+        }
+
+        return $this->handle();
+    }
+
     public function getCommandHandlerObject(): object
     {
         return $this->commandHandlerObject;
@@ -53,5 +73,10 @@ final class CommandHandlerDelegation
     public function getCommandValidatorMethodName(): string
     {
         return $this->commandValidatorMethodName;
+    }
+
+    public function hasCommandValidatorMethod(): bool
+    {
+        return $this->commandValidatorMethodName !== '';
     }
 }
