@@ -13,6 +13,7 @@ use Netlogix\JsonApiOrg\AnnotationGenerics\Domain\Model\WriteModelInterface;
 use Netlogix\WebApi\Domain\CommandHandler\CommandHandlerDelegation;
 use Netlogix\WebApi\Domain\CommandHandler\CommandHandlerResolver;
 use Netlogix\WebApi\Domain\Command\Error;
+use Netlogix\WebApi\Domain\Model\TopLevelMetaAware;
 use Netlogix\WebApi\Domain\Result\NoCommandHandlerFound;
 use Netlogix\WebApi\Security\Annotations as Security;
 
@@ -89,6 +90,13 @@ class GenericModelController extends BaseGenericModelController
 
         $topLevel = $this->relationshipIterator->createTopLevel($limitedResult);
         $topLevel = $this->applyPaginationMetaToTopLevel($topLevel, count($result), count($limitedResult), $page);
+
+        if ($result instanceof TopLevelMetaAware) {
+            $additionalMeta = $result->getTopLevelMeta($sort, $filter, $page);
+            foreach ($additionalMeta as $key => $value) {
+                $topLevel->getMeta()[$key] = $value;
+            }
+        }
 
         return $topLevel;
     }
