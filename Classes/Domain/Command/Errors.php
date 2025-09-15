@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace Netlogix\WebApi\Domain\Command;
 
+use Exception;
+use JsonSerializable;
 use Neos\Error\Messages\Message;
 
-final class Errors implements \JsonSerializable
+final class Errors implements JsonSerializable
 {
     private $issues = [];
 
@@ -31,7 +33,7 @@ final class Errors implements \JsonSerializable
                     function ($argument) {
                         try {
                             return (string)$argument;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                         }
                     },
                     $message->getArguments()
@@ -55,7 +57,7 @@ final class Errors implements \JsonSerializable
         return $this;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->issues;
     }
