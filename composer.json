@@ -7,8 +7,8 @@
     "require": {
         "neos/flow": "^8.3",
         "neos/fluid-adaptor": "^8.3",
-        "netlogix/jsonapiorg": "^6.0",
-        "netlogix/jsonapiorg-annotationgenerics": "^8.0"
+        "netlogix/jsonapiorg": "^7.0",
+        "netlogix/jsonapiorg-annotationgenerics": "^9.0"
     },
     "suggest": {
         "sitegeist/offcors": "Configure CORS headers in neos for different origins"

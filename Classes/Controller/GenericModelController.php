@@ -10,6 +10,7 @@ use Neos\Flow\Reflection\ReflectionService;
 use Netlogix\JsonApiOrg\AnnotationGenerics\Controller\GenericModelController as BaseGenericModelController;
 use Netlogix\JsonApiOrg\AnnotationGenerics\Domain\Model\Arguments as RequestArgument;
 use Netlogix\JsonApiOrg\AnnotationGenerics\Domain\Model\WriteModelInterface;
+use Netlogix\JsonApiOrg\Resource\Information\ExposableTypeMapInterface;
 use Netlogix\WebApi\Domain\CommandHandler\CommandHandlerDelegation;
 use Netlogix\WebApi\Domain\CommandHandler\CommandHandlerResolver;
 use Netlogix\WebApi\Domain\Command\Error;
@@ -35,13 +36,17 @@ class GenericModelController extends BaseGenericModelController
     /**
      * @param WriteModelInterface $resource
      * @param string $resourceType
+     * @param string $apiVersion
      * @return void
      *
      * @Flow\MapRequestBody("resource")
      * @Security\GuardArgument("resource")
      */
-    public function createAction(WriteModelInterface $resource, $resourceType = '')
-    {
+    public function createAction(
+        WriteModelInterface $resource,
+        $resourceType = '',
+        string $apiVersion = ExposableTypeMapInterface::NEXT_VERSION
+    ) {
         if (class_exists('Tideways\Profiler')) {
             \Tideways\Profiler::setTransactionName(get_class($resource));
         }
