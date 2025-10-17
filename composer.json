@@ -6,7 +6,7 @@
     "license": ["MIT"],
     "require": {
         "neos/flow": "^8.3 || ~9.0",
-        "neos/fluid-adaptor": "^8.3",
+        "neos/fluid-adaptor": "^8.3 || ~9.0",
         "netlogix/jsonapiorg": "^7.0",
         "netlogix/jsonapiorg-annotationgenerics": "^9.0"
     },
