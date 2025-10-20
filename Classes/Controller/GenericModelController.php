@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Netlogix\WebApi\Controller;
@@ -28,26 +29,28 @@ class GenericModelController extends BaseGenericModelController
 
     public function __construct(ReflectionService $reflectionService, ObjectManagerInterface $objectManager)
     {
-        $this->commandHandlerResolvers = array_map(function (string $className) use ($objectManager) {
-            return $objectManager->get($className);
-        }, $reflectionService->getAllImplementationClassNamesForInterface(CommandHandlerResolver::class));
+        $this->commandHandlerResolvers = array_map(
+            fn(string $className) => $objectManager->get($className),
+            $reflectionService->getAllImplementationClassNamesForInterface(CommandHandlerResolver::class)
+        );
     }
 
     /**
      * @param WriteModelInterface $resource
      * @param string $resourceType
+     * @param string $subPackage
      * @param string $apiVersion
-     * @return void
      *
      * @Flow\MapRequestBody("resource")
      * @Security\GuardArgument("resource")
      */
     public function createAction(
         WriteModelInterface $resource,
-        $resourceType = '',
+        string $resourceType,
+        ?string $subPackage = null,
         string $apiVersion = ExposableTypeMapInterface::NEXT_VERSION
-    ) {
-        if (class_exists('Tideways\Profiler')) {
+    ): void {
+        if (class_exists(\Tideways\Profiler::class)) {
             \Tideways\Profiler::setTransactionName(get_class($resource));
         }
         $delegation = $this->resolveCommandHandlerDelegation($resource);
@@ -56,9 +59,13 @@ class GenericModelController extends BaseGenericModelController
             return;
         }
 
-        if (class_exists('Tideways\Profiler')) {
+        if (class_exists(\Tideways\Profiler::class)) {
             \Tideways\Profiler::setTransactionName(
-                sprintf('%s::%s', get_class($delegation->getCommandHandlerObject()), $delegation->getCommandHandlerMethodName())
+                sprintf(
+                    '%s::%s',
+                    get_class($delegation->getCommandHandlerObject()),
+                    $delegation->getCommandHandlerMethodName()
+                )
             );
         }
         $result = $delegation->validateAndHandle();
