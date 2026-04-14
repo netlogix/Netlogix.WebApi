@@ -6,6 +6,7 @@ namespace Netlogix\WebApi\Controller;
 use Doctrine\Common\Collections\Selectable;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\ObjectManagement\ObjectManagerInterface;
+use Neos\Flow\Property\Exception as PropertyException;
 use Neos\Flow\Reflection\ReflectionService;
 use Netlogix\JsonApiOrg\AnnotationGenerics\Controller\GenericModelController as BaseGenericModelController;
 use Netlogix\JsonApiOrg\AnnotationGenerics\Domain\Model\Arguments as RequestArgument;
@@ -16,6 +17,7 @@ use Netlogix\WebApi\Domain\CommandHandler\CommandHandlerResolver;
 use Netlogix\WebApi\Domain\Command\Error;
 use Netlogix\WebApi\Domain\Model\TopLevelMetaAware;
 use Netlogix\WebApi\Domain\Result\NoCommandHandlerFound;
+use Netlogix\WebApi\Exception\BadRequestException;
 use Netlogix\WebApi\Security\Annotations as Security;
 
 class GenericModelController extends BaseGenericModelController
@@ -140,5 +142,14 @@ class GenericModelController extends BaseGenericModelController
         }
 
         return null;
+    }
+
+    protected function mapRequestArgumentsToControllerArguments()
+    {
+        try {
+            parent::mapRequestArgumentsToControllerArguments();
+        } catch (PropertyException $e) {
+            throw new BadRequestException($e->getMessage(), 1776169203, $e);
+        }
     }
 }
