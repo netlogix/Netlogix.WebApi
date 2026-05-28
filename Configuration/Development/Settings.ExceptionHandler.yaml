@@ -1,0 +1,29 @@
+Netlogix:
+  WebApi:
+    error:
+      availableErrorHandlers:
+
+        # In Development, replace the JSON renderers with the debug
+        # variant so API clients also receive exception type, message,
+        # file, line, trace and the nested previous chain — analogous
+        # to how Flow swaps its global ProductionExceptionHandler for
+        # the DebugExceptionHandler in Development.
+        'application/vnd.api+json':
+          className: 'Netlogix\WebApi\Error\JsonDebugExceptionHandler'
+
+        'application/json':
+          className: 'Netlogix\WebApi\Error\JsonDebugExceptionHandler'
+
+        # Override the production fallback with Flow's DebugExceptionHandler
+        # in Development. Mirrors Flow's own Development override at
+        # Neos.Flow.error.exceptionHandler so non-JSON requests get the
+        # same debug page they would in a vanilla Flow setup.
+        '*':
+          className: 'Neos\Flow\Error\DebugExceptionHandler'
+          options:
+            defaultRenderingOptions:
+              renderTechnicalDetails: true
+            renderingGroups:
+              noStacktraceExceptionGroup:
+                options:
+                  logException: true

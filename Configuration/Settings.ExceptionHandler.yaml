@@ -1,0 +1,65 @@
+Netlogix:
+  WebApi:
+    error:
+
+      # Picks the response renderer using HTTP Accept-header content
+      # negotiation, including q-values and wildcard ranges such as "*/*".
+      # This is not a simple "first configured key found in the header wins"
+      # match, so the order of entries here does not define priority.
+      # The "*" entry is the catch-all used when no more specific configured
+      # media type can be negotiated. If "*" is missing, the exception
+      # escapes to PHP's set_exception_handler instead.
+      #
+      # All configured handlers must implement
+      #   Neos\Flow\Error\ExceptionHandlerInterface
+      # so they can be either dispatched from here or used as the global
+      # Neos.Flow.error.exceptionHandler.
+      #
+      # The "options" key is forwarded 1:1 to $handler->setOptions(), so
+      # for Flow's own handlers it accepts the same keys as the standard
+      # Neos.Flow.error.exceptionHandler config (defaultRenderingOptions,
+      # renderingGroups, …).
+      availableErrorHandlers:
+
+        'application/vnd.api+json':
+          className: 'Netlogix\WebApi\Error\JsonExceptionHandler'
+
+        'application/json':
+          className: 'Netlogix\WebApi\Error\JsonExceptionHandler'
+
+        # Default fallback mirrors Flow's standard production exception
+        # handler so behaviour for non-JSON requests stays identical to a
+        # vanilla Flow setup. Development context overrides this with the
+        # DebugExceptionHandler (see Configuration/Development/…).
+        '*':
+          className: 'Neos\Flow\Error\ProductionExceptionHandler'
+          options:
+            defaultRenderingOptions:
+              viewClassName: 'Neos\Flow\Mvc\View\SimpleTemplateView'
+              viewOptions:
+                templatePathAndFilename: 'resource://Neos.Flow/Private/Templates/Error/Default.html'
+              renderTechnicalDetails: false
+              logException: true
+            renderingGroups:
+              notFoundExceptions:
+                matchingStatusCodes: [404, 410]
+                options:
+                  logException: false
+                  viewOptions:
+                    templatePathAndFilename: 'resource://Neos.Flow/Private/Templates/Error/Default.html'
+                  variables:
+                    errorDescription: 'Sorry, the page you requested was not found.'
+              databaseConnectionExceptions:
+                matchingExceptionClassNames: ['Neos\Flow\Persistence\Doctrine\Exception\DatabaseException']
+                options:
+                  viewOptions:
+                    templatePathAndFilename: 'resource://Neos.Flow/Private/Templates/Error/Default.html'
+                  variables:
+                    errorDescription: 'Sorry, the database connection couldn''t be established.'
+              noStacktraceExceptionGroup:
+                matchingExceptionClassNames: ['Neos\Flow\Security\Exception\InvalidHashException']
+                options:
+                  logException: false
+                  templatePathAndFilename: 'resource://Neos.Flow/Private/Templates/Error/Default.html'
+                  variables:
+                    errorDescription: 'Sorry, something went wrong.'
