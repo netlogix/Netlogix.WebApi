@@ -1,0 +1,14 @@
+Neos:
+  Flow:
+    http:
+      middlewares:
+
+        # Positioned 'after session' so this middleware sits inside any
+        # CORS wrapper that uses 'before session' (e.g. Sitegeist.OffCORS,
+        # which is only a Composer suggestion and may be absent). Anything
+        # further out in the chain therefore sees a real ResponseInterface
+        # even when downstream middlewares throw. Body rendering is delegated
+        # to Netlogix\WebApi\Error\ExceptionHandlerInterface.
+        'Netlogix.WebApi:ExceptionToResponse':
+          position: 'after session'
+          middleware: 'Netlogix\WebApi\Http\Middleware\ExceptionToResponseMiddleware'
