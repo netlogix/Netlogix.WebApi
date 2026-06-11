@@ -21,19 +21,13 @@ Netlogix:
       # renderingGroups, …).
       availableErrorHandlers:
 
-        'application/vnd.api+json':
-          className: 'Netlogix\WebApi\Error\JsonExceptionHandler'
-
-        'application/json':
-          className: 'Netlogix\WebApi\Error\JsonExceptionHandler'
-
         # Default fallback mirrors Flow's standard production exception
         # handler so behaviour for non-JSON requests stays identical to a
         # vanilla Flow setup. Development context overrides this with the
         # DebugExceptionHandler (see Configuration/Development/…).
         '*':
           className: 'Neos\Flow\Error\ProductionExceptionHandler'
-          options:
+          options: &default-exception-handler-options
             defaultRenderingOptions:
               viewClassName: 'Neos\Flow\Mvc\View\SimpleTemplateView'
               viewOptions:
@@ -63,3 +57,11 @@ Netlogix:
                   templatePathAndFilename: 'resource://Neos.Flow/Private/Templates/Error/Default.html'
                   variables:
                     errorDescription: 'Sorry, something went wrong.'
+
+        'application/vnd.api+json':
+          className: 'Netlogix\WebApi\Error\JsonExceptionHandler'
+          options: *default-exception-handler-options
+
+        'application/json':
+          className: 'Netlogix\WebApi\Error\JsonExceptionHandler'
+          options: *default-exception-handler-options

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Netlogix\WebApi\Error;
 
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Error\AbstractExceptionHandler;
 use Neos\Flow\Error\ExceptionHandlerInterface;
 use Neos\Flow\Error\WithHttpStatusInterface;
 use Neos\Flow\Error\WithReferenceCodeInterface;
@@ -28,28 +29,14 @@ use Neos\Flow\Http\Helper\ResponseInformationHelper;
  *
  * @Flow\Scope("singleton")
  */
-class JsonExceptionHandler implements ExceptionHandlerInterface
+class JsonExceptionHandler extends AbstractExceptionHandler implements ExceptionHandlerInterface
 {
     /**
-     * @var array
-     */
-    protected $options = [];
-
-    public function setOptions(array $options)
-    {
-        unset($options['className']);
-        $this->options = $options;
-    }
-
-    /**
      * @param \Throwable $exception
+     * @return void
      */
-    public function handleException($exception)
+    public function echoExceptionWeb($exception)
     {
-        if (error_reporting() === 0) {
-            return;
-        }
-
         $statusCode = $exception instanceof WithHttpStatusInterface ? $exception->getStatusCode() : 500;
         $statusMessage = ResponseInformationHelper::getStatusMessageByCode($statusCode);
 

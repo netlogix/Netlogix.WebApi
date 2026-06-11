@@ -20,10 +20,3 @@ Netlogix:
         # same debug page they would in a vanilla Flow setup.
         '*':
           className: 'Neos\Flow\Error\DebugExceptionHandler'
-          options:
-            defaultRenderingOptions:
-              renderTechnicalDetails: true
-            renderingGroups:
-              noStacktraceExceptionGroup:
-                options:
-                  logException: true

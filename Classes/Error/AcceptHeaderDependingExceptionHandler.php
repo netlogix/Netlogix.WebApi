@@ -141,7 +141,7 @@ class AcceptHeaderDependingExceptionHandler
         // Mirror Neos\Flow\Core\Booting\Scripts::initializeErrorHandling so
         // Flow's stock handlers get the dependencies they expect.
         $handler = new $className();
-        if (!$handler instanceof ExceptionHandlerInterface) {
+        if (!($handler instanceof ExceptionHandlerInterface)) {
             throw new \RuntimeException(
                 sprintf('Configured exception handler "%s" must implement %s', $className, ExceptionHandlerInterface::class),
                 1748434001
