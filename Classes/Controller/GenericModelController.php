@@ -126,14 +126,20 @@ class GenericModelController extends BaseGenericModelController
         return [$status, $result];
     }
 
+    /**
+     * Ends the action with a 400 response carrying the given errors.
+     *
+     * The response is built and thrown here instead of setting the status on $this->response and
+     * rendering the view: since Flow 9 the response returned by the view overrules any change made
+     * to $this->response, which turned every error into a 200.
+     */
     protected function respondWithError(Error $error): void
     {
         $this->response->setContentType(current($this->supportedMediaTypes));
-        $this->response->setStatusCode(400);
 
-        $this->view->assign('value', [
+        $this->throwStatus(400, null, json_encode([
             'errors' => $error->getErrors()
-        ]);
+        ], JSON_PRETTY_PRINT));
     }
 
     private function resolveCommandHandlerDelegation(WriteModelInterface $command): ?CommandHandlerDelegation
